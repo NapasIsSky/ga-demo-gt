@@ -1,0 +1,53 @@
+:root {
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono",
+    "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono",
+    "Courier New", monospace;
+
+  --primary-color: #674188;
+  --secondary-color: #c3acd0;
+
+  --bg-color: #fff;
+  --color: #86a3b8;
+
+  --spaceing-1: 8px;
+  --spaceing-2: 16px;
+  --spaceing-3: 24px;
+  --spaceing-4: 32px;
+  --spaceing-5: 40px;
+
+  --shadow: 8px 4px 16px -8px rgba(0, 0, 0, 0.4);
+
+  --clicked: clicked 1s;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  overflow: hidden;
+  font-family: var(--font-mono);
+  background-color: var(--bg-color);
+  color: var(--color);
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  height: 100%;
+  margin: 0;
+}
+
+/* animetion */
+@keyframes clicked {
+  from {
+    opacity: 0.8;
+    transform: scale(0.9);
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+  to {
+    transform: scale(2);
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+}
