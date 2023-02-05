@@ -78,8 +78,6 @@
   -webkit-box-shadow: var(--shadow);
   -moz-box-shadow: var(--shadow);
   position: absolute;
-  top: 8%;
-  right: 10%;
 }
 
 .logOutBtn:active {
@@ -93,8 +91,6 @@
   padding: var(--spaceing-2);
   border-radius: 50%;
   position: absolute;
-  right: 10%;
-  bottom: -8%;
   cursor: pointer;
 }
 
@@ -147,9 +143,8 @@
   }
 }
 
-/* Payment */
-.paymentContainer {
-  background-color: var(--bg-color);
+/*checkout */
+.checkOutContainer {
   display: flex;
   flex-direction: column;
   padding-top: var(--spaceing-4);
@@ -184,8 +179,7 @@
   box-shadow: var(--shadow);
   -webkit-box-shadow: var(--shadow);
   -moz-box-shadow: var(--shadow);
-  max-height: 50%;
-  width: 50%;
+  max-height: 400px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -261,17 +255,15 @@
 }
 
 .total {
-  margin-top: var(--spaceing-4);
-  margin-right: 20%;
+  margin-top: var(--spaceing-5);
   align-self: end;
   color: var(--primary-color);
 }
 
 .checkOutBtn {
-  width: 10%;
   align-self: center;
   padding: var(--spaceing-2);
-  margin-top: var(--spaceing-4);
+  margin-top: var(--spaceing-5);
   border: none;
   box-shadow: var(--shadow);
   -webkit-box-shadow: var(--shadow);
@@ -284,4 +276,200 @@
 
 .checkOutBtn:active {
   animation: var(--clicked);
+}
+
+/* payment */
+.paymentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: var(--spaceing-4);
+  padding-left: var(--spaceing-4);
+  padding-right: var(--spaceing-4);
+  overflow: hidden;
+  position: relative;
+}
+
+.paymentSumContainer {
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow);
+  -webkit-box-shadow: var(--shadow);
+  -moz-box-shadow: var(--shadow);
+  margin-top: 4%;
+  border-radius: var(--spaceing-1);
+  padding: var(--spaceing-3);
+}
+
+.paymentSumWrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.paymentNomalText {
+  color: var(--secondary-color);
+  margin-top: var(--spaceing-2);
+}
+
+.totalPrice {
+  color: var(--primary-color);
+  margin-top: var(--spaceing-4);
+}
+
+.paymentMethodContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spaceing-3);
+  box-shadow: var(--shadow);
+  -webkit-box-shadow: var(--shadow);
+  -moz-box-shadow: var(--shadow);
+  margin-top: 4%;
+  border-radius: var(--spaceing-1);
+  padding: var(--spaceing-3);
+}
+
+.paymentMethodBtn,
+.activePaymentMethodBtn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  -webkit-box-shadow: var(--shadow);
+  -moz-box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+.activePaymentMethodBtn {
+  background-color: var(--secondary-color);
+  animation: chose 0.5s;
+}
+
+.creditCardIcon {
+  width: var(--spaceing-5);
+  height: auto;
+}
+
+.cashIcon {
+  width: var(--spaceing-5);
+  height: auto;
+}
+
+.payBtn {
+  align-self: center;
+  padding: var(--spaceing-2);
+  margin-top: var(--spaceing-5);
+  border: none;
+  box-shadow: var(--shadow);
+  -webkit-box-shadow: var(--shadow);
+  -moz-box-shadow: var(--shadow);
+  border-radius: var(--spaceing-1);
+  background-color: var(--primary-color);
+  color: var(--bg-color);
+  cursor: pointer;
+}
+
+.payBtn:active {
+  animation: var(--clicked);
+}
+
+@media screen and (max-width: 600px) {
+  .cartBtn {
+    right: 10%;
+    bottom: -8%;
+  }
+  .logOutBtn {
+    top: -10%;
+    right: -10%;
+  }
+  .ordersContainer {
+    width: 100%;
+  }
+  .total {
+    margin-right: 26%;
+  }
+  .paymentSumContainer,
+  .paymentMethodContainer {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .cartBtn {
+    right: 10%;
+    bottom: -8%;
+  }
+  .logOutBtn {
+    top: 8%;
+    right: 10%;
+  }
+  .ordersContainer {
+    width: 50%;
+  }
+  .total {
+    margin-right: 26%;
+  }
+  .paymentSumContainer,
+  .paymentMethodContainer {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 1920px) {
+  .cartBtn {
+    right: 10%;
+    bottom: -8%;
+  }
+  .logOutBtn {
+    top: 8%;
+    right: 10%;
+  }
+  .ordersContainer {
+    width: 50%;
+  }
+  .total {
+    margin-right: 26%;
+  }
+  .paymentSumContainer,
+  .paymentMethodContainer {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 1921px) {
+  .cartBtn {
+    right: 24%;
+    bottom: -8%;
+  }
+  .logOutBtn {
+    top: 8%;
+    right: 24%;
+  }
+  .ordersContainer {
+    width: 30%;
+  }
+  .total {
+    margin-right: 36%;
+  }
+  .paymentSumContainer,
+  .paymentMethodContainer {
+    width: 30%;
+  }
+}
+
+@keyframes chose {
+  from {
+    opacity: 0.7;
+    transform: scale(0.98);
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+  to {
+    opacity: 0.9;
+    transform: scale(1.04);
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
 }

@@ -15,7 +15,7 @@
   --spaceing-4: 32px;
   --spaceing-5: 40px;
 
-  --shadow: 8px 4px 16px -8px rgba(0, 0, 0, 0.4);
+  --shadow: 4px 4px 16px -8px rgba(0, 0, 0, 0.2);
 
   --clicked: clicked 1s;
 }
