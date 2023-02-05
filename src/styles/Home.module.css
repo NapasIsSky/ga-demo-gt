@@ -50,6 +50,7 @@
   padding-block: var(--spaceing-1);
   padding-inline: var(--spaceing-2);
   border-radius: var(--spaceing-1);
+  cursor: pointer;
 }
 
 /* home */
@@ -78,6 +79,7 @@
   -webkit-box-shadow: var(--shadow);
   -moz-box-shadow: var(--shadow);
   position: absolute;
+  cursor: pointer;
 }
 
 .logOutBtn:active {
