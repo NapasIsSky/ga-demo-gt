@@ -15,7 +15,7 @@ export default function Home() {
   const appStore = React.useContext(AppContext);
 
   const [title, setTitle] = React.useState<string>("LOGIN");
-  const [step, setStep] = React.useState<1 | 2 | 3 | 4>(4);
+  const [step, setStep] = React.useState<1 | 2 | 3 | 4>(1);
   const [username, setUsername] = React.useState<string>("NapDev");
   const [password, setPassword] = React.useState<string>("1");
   const [cartList, setCartList] = React.useState<ICart[]>([]);
@@ -154,13 +154,13 @@ export default function Home() {
     setTotal(result);
   }, [cartList]);
 
-  // React.useEffect(() => {
-  //   if (username !== "" && password !== "") {
-  //     setStep(2);
-  //   } else {
-  //     setStep(1);
-  //   }
-  // }, []);
+  React.useEffect(() => {
+    if (username !== "" && password !== "") {
+      setStep(2);
+    } else {
+      setStep(1);
+    }
+  }, []);
 
   const renderLogin = () => {
     return (
