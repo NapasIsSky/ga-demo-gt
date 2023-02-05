@@ -16,8 +16,8 @@ export default function Home() {
 
   const [title, setTitle] = React.useState<string>("LOGIN");
   const [step, setStep] = React.useState<1 | 2 | 3 | 4>(1);
-  const [username, setUsername] = React.useState<string>("NapDev");
-  const [password, setPassword] = React.useState<string>("1");
+  const [username, setUsername] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
   const [cartList, setCartList] = React.useState<ICart[]>([]);
   const [total, setTotal] = React.useState<number>(0);
   const [paymentMethod, setPaymentMethod] = React.useState<"card" | "cash">("card");
