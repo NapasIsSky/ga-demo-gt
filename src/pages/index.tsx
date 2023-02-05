@@ -8,16 +8,19 @@ import CartIcon from "@/components/icons/CartIcon";
 import { ICart, IUser } from "@/interfaces";
 import CloseIcon from "@/components/icons/CloseIcon";
 import { AppContext } from "@/context";
+import CreditCardIcon from "@/components/icons/CreditCardIcon";
+import CashIcon from "@/components/icons/CashIcon";
 
 export default function Home() {
   const appStore = React.useContext(AppContext);
 
   const [title, setTitle] = React.useState<string>("LOGIN");
-  const [step, setStep] = React.useState<1 | 2 | 3>(1);
-  const [username, setUsername] = React.useState<string>("");
-  const [password, setPassword] = React.useState<string>("");
+  const [step, setStep] = React.useState<1 | 2 | 3 | 4>(4);
+  const [username, setUsername] = React.useState<string>("NapDev");
+  const [password, setPassword] = React.useState<string>("1");
   const [cartList, setCartList] = React.useState<ICart[]>([]);
   const [total, setTotal] = React.useState<number>(0);
+  const [paymentMethod, setPaymentMethod] = React.useState<"card" | "cash">("card");
 
   const onLogin = () => {
     const userIndex = userData.findIndex((user: IUser) => user.username === username);
@@ -25,6 +28,7 @@ export default function Home() {
     if (userIndex !== -1 && password === userData[userIndex].password) {
       appStore?.setUsername(username);
       appStore?.setPassword(password);
+      gtag("set", "user_id", username);
       setTitle("HOME");
       setStep(2);
     } else {
@@ -40,11 +44,45 @@ export default function Home() {
     setStep(1);
   };
 
+  const onViewCart = () => {
+    const gtagItemsList: any[] = [];
+
+    cartList.forEach((item: ICart, index: number) => {
+      gtagItemsList.push({
+        item_id: item.product_detail.id,
+        item_name: item.product_detail.name,
+        index: index,
+        price: item.product_detail.price,
+        quantity: item.quantity,
+      });
+    });
+
+    gtag("event", "view_cart", {
+      currency: "THB",
+      items: gtagItemsList,
+    });
+
+    setTitle("CHECKOUT");
+    setStep(3);
+  };
+
   const onAddQuantity = (orderIndex: number) => {
     setCartList((prevState: ICart[]) =>
       prevState.map((item: ICart, index: number) => {
         if (index === orderIndex) {
-          return { ...item, quantity: item.quantity++ };
+          gtag("event", "add_to_cart", {
+            currency: "THB",
+            value: item.product_detail.price,
+            items: [
+              {
+                item_id: item.product_detail.id,
+                item_name: item.product_detail.name,
+                price: item.product_detail.price,
+                quantity: 1,
+              },
+            ],
+          });
+          return { ...item, quantity: item.quantity + 1 };
         } else {
           return item;
         }
@@ -56,12 +94,56 @@ export default function Home() {
     setCartList((prevState: ICart[]) =>
       prevState.map((item: ICart, index: number) => {
         if (index === orderIndex && item.quantity > 1) {
+          gtag("event", "remove_from_cart", {
+            currency: "THB",
+            value: item.product_detail.price,
+            items: [
+              {
+                item_id: item.product_detail.id,
+                item_name: item.product_detail.name,
+                price: item.product_detail.price,
+                quantity: 1,
+              },
+            ],
+          });
           return { ...item, quantity: item.quantity - 1 };
         } else {
           return item;
         }
       }),
     );
+  };
+
+  const onPurchase = () => {
+    const value: number = cartList.reduce(
+      (accumulator, currentValue) =>
+        accumulator + currentValue.product_detail.price * currentValue.quantity,
+      0,
+    );
+
+    const gtagItemsList: any[] = [];
+
+    cartList.forEach((item: ICart, index: number) => {
+      gtagItemsList.push({
+        item_id: item.product_detail.id,
+        item_name: item.product_detail.name,
+        index: index,
+        price: item.product_detail.price,
+        quantity: item.quantity,
+      });
+    });
+
+    gtag("event", "purchase", {
+      currency: "THB",
+      transaction_id: `T_${Math.floor(Math.random() * 100)}`,
+      value: value,
+      tax: (value * 7) / 100,
+      items: gtagItemsList,
+    });
+
+    setTitle("HOME");
+    setStep(2);
+    setCartList([]);
   };
 
   React.useEffect(() => {
@@ -72,13 +154,13 @@ export default function Home() {
     setTotal(result);
   }, [cartList]);
 
-  React.useEffect(() => {
-    if (username !== "" && password !== "") {
-      setStep(2);
-    } else {
-      setStep(1);
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   if (username !== "" && password !== "") {
+  //     setStep(2);
+  //   } else {
+  //     setStep(1);
+  //   }
+  // }, []);
 
   const renderLogin = () => {
     return (
@@ -117,13 +199,7 @@ export default function Home() {
           <h4>LOG OUT</h4>
         </button>
         <CardList productList={productData} cartList={cartList} setCartList={setCartList} />
-        <div
-          onClick={() => {
-            setTitle("CHECKOUT");
-            setStep(3);
-          }}
-          className={styles.cartBtn}
-        >
+        <div onClick={onViewCart} className={styles.cartBtn}>
           <CartIcon className={styles.cartIcon} />
           {cartList.length ? (
             <div className={styles.cartBadge}>
@@ -135,11 +211,16 @@ export default function Home() {
     );
   };
 
-  const renderPayment = () => {
+  const renderCheckout = () => {
     return (
-      <div className={styles.paymentContainer}>
+      <div className={styles.checkOutContainer}>
         <h1 className={styles.cartTitle}>MY CART</h1>
-        <div onClick={() => setStep(2)} className={styles.closeBtn}>
+        <div
+          onClick={() => {
+            setStep(2);
+          }}
+          className={styles.closeBtn}
+        >
           <CloseIcon className={styles.cartCloseIcon} />
         </div>
 
@@ -165,16 +246,72 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <h3 className={styles.total}>{`Totol: ฿${total}`}</h3>
+        <h3 className={styles.total}>{`Total: ฿${total}`}</h3>
         <button
           onClick={() => {
-            setTitle("HOME");
-            setStep(2);
-            setCartList([]);
+            setTitle("PAYMENT");
+            setStep(4);
           }}
           className={styles.checkOutBtn}
         >
-          CHECK OUT
+          <h3>CHECK OUT</h3>
+        </button>
+      </div>
+    );
+  };
+
+  const renderPayment = () => {
+    const tax: number = total + (total * 7) / 100;
+
+    return (
+      <div className={styles.paymentContainer}>
+        <h1 className={styles.cartTitle}>PAYMENT</h1>
+        <div
+          onClick={() => {
+            setStep(3);
+          }}
+          className={styles.closeBtn}
+        >
+          <CloseIcon className={styles.cartCloseIcon} />
+        </div>
+
+        <div className={styles.paymentSumContainer}>
+          <div className={styles.paymentSumWrap}>
+            <h3 className={styles.paymentNomalText}>Subtotal</h3>
+            <h3 className={styles.paymentNomalText}>{`฿${total}`}</h3>
+          </div>
+          <div className={styles.paymentSumWrap}>
+            <h3 className={styles.paymentNomalText}>Tax</h3>
+            <h3 className={styles.paymentNomalText}>{`฿${tax}`}</h3>
+          </div>
+          <div className={styles.paymentSumWrap}>
+            <h2 className={styles.totalPrice}>Total Price</h2>
+            <h2 className={styles.totalPrice}>{`฿${total + tax}`}</h2>
+          </div>
+        </div>
+
+        <div className={styles.paymentMethodContainer}>
+          <h3 className={styles.paymentNomalText}>Choose Payment method: </h3>
+          <div
+            onClick={() => setPaymentMethod("card")}
+            className={
+              paymentMethod === "card" ? styles.activePaymentMethodBtn : styles.paymentMethodBtn
+            }
+          >
+            <CreditCardIcon className={styles.creditCardIcon} />
+          </div>
+          <div
+            onClick={() => setPaymentMethod("cash")}
+            className={
+              paymentMethod === "cash" ? styles.activePaymentMethodBtn : styles.paymentMethodBtn
+            }
+          >
+            <CashIcon className={styles.cashIcon} />
+          </div>
+        </div>
+
+        <button onClick={onPurchase} className={styles.payBtn}>
+          <h3>PURCHESE</h3>
         </button>
       </div>
     );
@@ -185,6 +322,8 @@ export default function Home() {
       return renderLogin();
     } else if (step === 2) {
       return renderHome();
+    } else if (step === 3) {
+      return renderCheckout();
     } else {
       return renderPayment();
     }

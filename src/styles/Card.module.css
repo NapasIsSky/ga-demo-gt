@@ -69,11 +69,34 @@
 
 /* cardlist */
 .cardListContainer {
-  width: 60%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: var(--spaceing-3);
   padding: var(--spaceing-4);
   overflow-x: auto;
+}
+
+@media screen and (max-width: 600px) {
+  .cardListContainer {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .cardListContainer {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 1920px) {
+  .cardListContainer {
+    width: 46%;
+  }
+}
+
+@media screen and (min-width: 1921px) {
+  .cardListContainer {
+    width: 848px;
+  }
 }
