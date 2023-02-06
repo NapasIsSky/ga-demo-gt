@@ -34,7 +34,7 @@ const CardList: React.FC<ICardList> = (props) => {
       setCartList((prevState: ICart[]) =>
         prevState.map((item: ICart) => {
           if (item.product_detail.id === product_id) {
-            return { ...item, quantity: item.quantity++ };
+            return { ...item, quantity: item.quantity + 1 };
           } else {
             return item;
           }

@@ -261,7 +261,7 @@ export default function Home() {
   };
 
   const renderPayment = () => {
-    const tax: number = total + (total * 7) / 100;
+    const tax: number = (total * 7) / 100;
 
     return (
       <div className={styles.paymentContainer}>
