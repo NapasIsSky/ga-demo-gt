@@ -3,16 +3,19 @@ import { IProduct, IUser } from "@/interfaces";
 export const userData: IUser[] = [
   {
     id: "01",
+    code: "u01",
     username: "NapDev",
     password: "1",
   },
   {
     id: "02",
+    code: "u02",
     username: "ZankDev",
     password: "1",
   },
   {
     id: "03",
+    code: "u03",
     username: "MhooDev",
     password: "1",
   },
