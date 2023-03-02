@@ -6,32 +6,38 @@ import { AppContext } from "@/context";
 
 interface ICardList {
   productList: IProduct[];
-  cartList: ICart[];
-  setCartList: any;
 }
 
 const CardList: React.FC<ICardList> = (props) => {
-  const { productList, cartList, setCartList } = props;
+  const { productList } = props;
 
   const appStore = React.useContext(AppContext);
 
   const addToCart = (product_id: string) => {
-    const productIndex = cartList.findIndex((item: ICart) => item.product_detail.id === product_id);
-    if (cartList.length > 0 && productIndex !== -1) {
+    const productIndex = appStore?.cartList.findIndex(
+      (item: ICart) => item.product_detail.id === product_id,
+    );
+    if (
+      appStore !== undefined &&
+      appStore !== null &&
+      appStore.cartList.length > 0 &&
+      productIndex !== undefined &&
+      productIndex !== -1
+    ) {
       gtag("event", "add_to_cart", {
         user_id: appStore?.username,
         currency: "THB",
-        value: cartList[productIndex].product_detail.price,
+        value: appStore.cartList[productIndex].product_detail.price,
         items: [
           {
-            item_id: cartList[productIndex].product_detail.id,
-            item_name: cartList[productIndex].product_detail.name,
-            price: cartList[productIndex].product_detail.price,
+            item_id: appStore.cartList[productIndex].product_detail.id,
+            item_name: appStore.cartList[productIndex].product_detail.name,
+            price: appStore.cartList[productIndex].product_detail.price,
             quantity: 1,
           },
         ],
       });
-      setCartList((prevState: ICart[]) =>
+      appStore.setCartList((prevState: ICart[]) =>
         prevState.map((item: ICart) => {
           if (item.product_detail.id === product_id) {
             return { ...item, quantity: item.quantity + 1 };
@@ -55,7 +61,7 @@ const CardList: React.FC<ICardList> = (props) => {
           },
         ],
       });
-      setCartList((prevState: ICart[]) => [
+      appStore?.setCartList((prevState: ICart[]) => [
         ...prevState,
         { product_detail: { ...productObj[0] }, quantity: 1 },
       ]);

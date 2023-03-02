@@ -1,12 +1,15 @@
 export interface IApp {
   username: string;
   password: string;
+  cartList: ICart[];
   setUsername: (user: string) => void;
   setPassword: (pass: string) => void;
+  setCartList: any;
 }
 
 export interface IUser {
   id: string;
+  code: string;
   username: string;
   password: string;
 }
